@@ -1,9 +1,5 @@
 package com.jun.converter.util;
 
-import java.util.Set;
-
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.core.convert.TypeDescriptor;
@@ -12,53 +8,52 @@ import org.springframework.core.convert.converter.ConverterFactory;
 import org.springframework.core.convert.converter.GenericConverter;
 import org.springframework.core.convert.support.GenericConversionService;
 
+import javax.annotation.PostConstruct;
+import java.util.Set;
+
 public class MyConversionService implements ConversionService {
 
-	@Autowired
-	private GenericConversionService conversionService;
-	private Set<?> converters;
+    @Autowired
+    private GenericConversionService conversionService;
+    private Set<?> converters;
 
-	@PostConstruct
-	public void afterPropertiesSet() {
-		if (converters != null) {
-			for (Object converter : converters) {
-				if (converter instanceof Converter<?, ?>) {
-					conversionService.addConverter((Converter<?, ?>) converter);
-				} else if (converter instanceof ConverterFactory<?, ?>) {
-					conversionService.addConverterFactory((ConverterFactory<?, ?>) converter);
-				} else if (converter instanceof GenericConverter) {
-					conversionService.addConverter((GenericConverter) converter);
-				}
-			}
-		}
-	}
+    @PostConstruct
+    public void afterPropertiesSet() {
+        if (converters != null) {
+            for (Object converter : converters) {
+                if (converter instanceof Converter<?, ?>) {
+                    conversionService.addConverter((Converter<?, ?>) converter);
+                } else if (converter instanceof ConverterFactory<?, ?>) {
+                    conversionService.addConverterFactory((ConverterFactory<?, ?>) converter);
+                } else if (converter instanceof GenericConverter) {
+                    conversionService.addConverter((GenericConverter) converter);
+                }
+            }
+        }
+    }
 
-	@Override
-	public boolean canConvert(Class<?> sourceType, Class<?> targetType) {
-		return conversionService.canConvert(sourceType, targetType);
-	}
+    public boolean canConvert(Class<?> sourceType, Class<?> targetType) {
+        return conversionService.canConvert(sourceType, targetType);
+    }
 
-	@Override
-	public boolean canConvert(TypeDescriptor sourceType, TypeDescriptor targetType) {
-		return conversionService.canConvert(sourceType, targetType);
-	}
+    public boolean canConvert(TypeDescriptor sourceType, TypeDescriptor targetType) {
+        return conversionService.canConvert(sourceType, targetType);
+    }
 
-	@Override
-	public <T> T convert(Object source, Class<T> targetType) {
-		return conversionService.convert(source, targetType);
-	}
+    public <T> T convert(Object source, Class<T> targetType) {
+        return conversionService.convert(source, targetType);
+    }
 
-	@Override
-	public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
-		return conversionService.convert(source, sourceType, targetType);
-	}
+    public Object convert(Object source, TypeDescriptor sourceType, TypeDescriptor targetType) {
+        return conversionService.convert(source, sourceType, targetType);
+    }
 
-	public Set<?> getConverters() {
-		return converters;
-	}
+    public Set<?> getConverters() {
+        return converters;
+    }
 
-	public void setConverters(Set<?> converters) {
-		this.converters = converters;
-	}
+    public void setConverters(Set<?> converters) {
+        this.converters = converters;
+    }
 
 }
